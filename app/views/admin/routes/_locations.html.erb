@@ -1,8 +1,16 @@
-<div class="main_section panel" id="main_sidebar_section">
-  <h3>Locations</h3>
+<div class="main_section panel" id="main_map_section">
+  <h3>Map</h3>
 
   <div id="map-container" class="panel_contents">
     <div id="map_canvas" style="width:870px; height:400px;"></div>
+  </div>
+</div>
+
+<div class="main_section panel" id="main_locations_section">
+  <h3>Locations</h3>
+
+  <div id="location-list" class="panel_contents">
+
   </div>
 </div>
 
@@ -10,6 +18,13 @@
 <script type="text/javascript">
   var poly;
   var map;
+  var polyOptions = {
+    strokeColor:'#000000',
+    strokeOpacity:1.0,
+    strokeWeight:3
+  };
+
+  var routeMarkers = new Array();
 
   function handleError(error) {
     alert('Error: ' + error.message + ' (' + error.code + ')');
@@ -32,18 +47,57 @@
 
     // Because path is an MVCArray, we can simply append a new coordinate
     // and it will automatically appear
-    path.push(event.latLng);
 
-    $.post('<%= route_locations_url(@route) %>', { location: { lat: event.latLng.lat(), lng: event.latLng.lng() }, name:"John", time:"2pm" },
+    $.post('<%= route_locations_url(@route) %>', { location:{ lat:event.latLng.lat(), lng:event.latLng.lng() }, name:"John", time:"2pm" },
         function (data) {
-          alert("Data Loaded: " + data);
-        });
+          if (data == "ok") {
 
-    // Add a new marker at the new plotted point on the polyline.
+            path.push(event.latLng);
+
+            // Add a new marker at the new plotted point on the polyline.
+//            var marker = new google.maps.Marker({
+//              position:event.latLng,
+//              title:'#' + path.getLength(),
+//              map:map
+//            });
+
+            reloadLocations();
+          }
+        });
+  }
+
+  function removePolygon() {
+    poly.setMap(null);
+    var original_length = routeMarkers.length;
+    for (var i = 0; i < original_length; i = i + 1){
+      routeMarkers.pop().setMap(null);
+    }
+  }
+
+  function resetPolygon() {
+    poly = new google.maps.Polyline(polyOptions);
+    poly.setMap(map);
+  }
+
+  function loadLocations() {
+  <% @route.locations.each do |location| %>
+    var path = poly.getPath();
+    var loc = new google.maps.LatLng(<%= location.lat %>, <%= location.lng %>);
+    path.push(loc);
+  <% if location.vstop %>
     var marker = new google.maps.Marker({
-      position:event.latLng,
+      position:loc,
       title:'#' + path.getLength(),
       map:map
+    });
+    routeMarkers.push(marker);
+  <% end %>
+  <% end %>
+  }
+
+  function reloadLocations() {
+    $.get('<%= route_locations_url(@route) %>', function (data) {
+      $('#location-list').html(data);
     });
   }
 
@@ -54,19 +108,16 @@
       mapTypeId:google.maps.MapTypeId.ROADMAP
     };
 
-    var polyOptions = {
-      strokeColor:'#000000',
-      strokeOpacity:1.0,
-      strokeWeight:3
-    };
-
     map = new google.maps.Map(document.getElementById('map_canvas'),
         myOptions);
 
-    poly = new google.maps.Polyline(polyOptions);
-    poly.setMap(map);
+    resetPolygon();
 
     google.maps.event.addListener(map, 'click', addLatLng);
+
+    resetPolygon();
+    loadLocations();
+    reloadLocations();
 
     if (navigator.geolocation) {
       // ... ask for current position ...
@@ -79,11 +130,10 @@
 
   google.maps.event.addDomListener(window, 'load', initialize);
 
-
   $().ready(function () {
-    $("#map_canvas").css('width', $("#map-container").width())
+    $("#map_canvas").css('width', $("#map-container").width());
     $(window).on('resize', function () {
-      $("#map_canvas").css('width', $("#map-container").width())
+      $("#map_canvas").css('width', $("#map-container").width());
     });
   });
 

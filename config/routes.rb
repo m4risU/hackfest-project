@@ -7,7 +7,11 @@ HackfestProject::Application.routes.draw do
   root :to => "home#index"
 
   resources :routes do
-    resources :locations
+    resources :locations do
+      member do
+        get :toggle
+      end
+    end
   end
 
 end

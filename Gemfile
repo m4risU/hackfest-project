@@ -45,3 +45,5 @@ gem 'kaminari'
 
 gem "formtastic", "~> 2.1.1"
 gem "activeadmin", "~> 0.4.3"
+
+gem "geocoder"

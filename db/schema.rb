@@ -48,8 +48,8 @@ ActiveRecord::Schema.define(:version => 20120413210413) do
 
   create_table "locations", :force => true do |t|
     t.boolean  "vstop"
-    t.string   "lat"
-    t.string   "lng"
+    t.float    "lat"
+    t.float    "lng"
     t.integer  "route_id"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
