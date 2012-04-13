@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  vstop: false
+  lat: MyString
+  lng: MyString
+  route_id: 1
+
+two:
+  vstop: false
+  lat: MyString
+  lng: MyString
+  route_id: 1

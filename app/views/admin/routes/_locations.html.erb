@@ -34,6 +34,11 @@
     // and it will automatically appear
     path.push(event.latLng);
 
+    $.post('<%= route_locations_url(@route) %>', { location: { lat: event.latLng.lat(), lng: event.latLng.lng() }, name:"John", time:"2pm" },
+        function (data) {
+          alert("Data Loaded: " + data);
+        });
+
     // Add a new marker at the new plotted point on the polyline.
     var marker = new google.maps.Marker({
       position:event.latLng,
