@@ -8,7 +8,9 @@
 
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=true&key=AIzaSyAQr_tEegteAJSxNhTnKkWji82ANltfK-s"></script>
 <script type="text/javascript">
+  var poly;
   var map;
+
   function handleError(error) {
     alert('Error: ' + error.message + ' (' + error.code + ')');
   }
@@ -24,6 +26,21 @@
           map:map, title:"Your position" });
   }
 
+  function addLatLng(event) {
+
+    var path = poly.getPath();
+
+    // Because path is an MVCArray, we can simply append a new coordinate
+    // and it will automatically appear
+    path.push(event.latLng);
+
+    // Add a new marker at the new plotted point on the polyline.
+    var marker = new google.maps.Marker({
+      position:event.latLng,
+      title:'#' + path.getLength(),
+      map:map
+    });
+  }
 
   function initialize() {
     var myOptions = {
@@ -31,9 +48,20 @@
       center:new google.maps.LatLng(-34.397, 150.644),
       mapTypeId:google.maps.MapTypeId.ROADMAP
     };
+
+    var polyOptions = {
+      strokeColor:'#000000',
+      strokeOpacity:1.0,
+      strokeWeight:3
+    };
+
     map = new google.maps.Map(document.getElementById('map_canvas'),
         myOptions);
-    var error;
+
+    poly = new google.maps.Polyline(polyOptions);
+    poly.setMap(map);
+
+    google.maps.event.addListener(map, 'click', addLatLng);
 
     if (navigator.geolocation) {
       // ... ask for current position ...
@@ -46,14 +74,13 @@
 
   google.maps.event.addDomListener(window, 'load', initialize);
 
-  $().ready(function(){
-    $("#map_canvas").css('width' , $("#map-container").width())
-    $(window).on('resize', function(){
-      $("#map_canvas").css('width' , $("#map-container").width())
+
+  $().ready(function () {
+    $("#map_canvas").css('width', $("#map-container").width())
+    $(window).on('resize', function () {
+      $("#map_canvas").css('width', $("#map-container").width())
     });
   });
-
-
 
 
 </script>

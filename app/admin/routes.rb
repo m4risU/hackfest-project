@@ -8,7 +8,7 @@ ActiveAdmin.register Route do
 
   sidebar :help do
     ul do
-      li "First Line of Help"
+      li "Double click to create new location"
     end
   end
 
