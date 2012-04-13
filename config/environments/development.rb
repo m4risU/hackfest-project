@@ -10,7 +10,7 @@ HackfestProject::Application.configure do
   config.whiny_nils = true
 
   # Show full error reports and disable caching
-  config.consider_all_requests_local       = true
+  config.consider_all_requests_local = true
   config.action_controller.perform_caching = false
 
   # Don't care if the mailer can't send
@@ -34,4 +34,8 @@ HackfestProject::Application.configure do
 
   # Expands the lines which load the assets
   config.assets.debug = true
+
+  # devise default url
+  config.action_mailer.default_url_options = {:host => 'localhost:3000'}
+
 end
