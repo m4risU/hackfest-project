@@ -69,8 +69,8 @@ GEM
     fastercsv (1.5.4)
     foreman (0.41.0)
       thor (>= 0.13.6)
-    formtastic (2.2.0)
-      actionpack (>= 3.0)
+    formtastic (2.1.1)
+      actionpack (~> 3.0)
     has_scope (0.5.1)
     highline (1.6.11)
     hike (1.2.1)
@@ -182,11 +182,12 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  activeadmin
+  activeadmin (~> 0.4.3)
   capistrano
   coffee-rails (~> 3.2.1)
   devise
   foreman
+  formtastic (~> 2.1.1)
   jquery-rails
   kaminari
   mysql2

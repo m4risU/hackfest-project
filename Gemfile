@@ -42,4 +42,6 @@ gem 'twitter-bootstrap-rails'
 gem 'devise'
 gem 'mysql2'
 gem 'kaminari'
-gem 'activeadmin'
+
+gem "formtastic", "~> 2.1.1"
+gem "activeadmin", "~> 0.4.3"

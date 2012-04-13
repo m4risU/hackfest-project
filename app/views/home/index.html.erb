@@ -2,43 +2,43 @@
 
 <% content_for :javascript do %>
   <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=true&key=AIzaSyAQr_tEegteAJSxNhTnKkWji82ANltfK-s"></script>
-  <script type="text/javascript">
-    var map;
-    function handleError(error) {
-      alert('Error: ' + error.message + ' (' + error.code + ')');
-    }
-
-    function locationFound(position) {
-      // Center map on your location ...
-      mapCenter = new google.maps.LatLng(position.coords.latitude,
-          position.coords.longitude);
-      map.setCenter(mapCenter);
-      // ... add new marker at map's center ...
-      marker = new google.maps.Marker(
-          { position:mapCenter,
-            map:map, title:"Your position" });
-    }
-
-
-    function initialize() {
-      var myOptions = {
-        zoom:14,
-        center:new google.maps.LatLng(-34.397, 150.644),
-        mapTypeId:google.maps.MapTypeId.ROADMAP
-      };
-      map = new google.maps.Map(document.getElementById('map_canvas'),
-          myOptions);
-      var error;
-
-      if (navigator.geolocation) {
-        // ... ask for current position ...
-        navigator.geolocation.getCurrentPosition(locationFound,
-            handleError);
-      } else {
-        alert("Geolocation not available");
+    <script type="text/javascript">
+      var map;
+      function handleError(error) {
+        alert('Error: ' + error.message + ' (' + error.code + ')');
       }
-    }
 
-    google.maps.event.addDomListener(window, 'load', initialize);
-  </script>
+      function locationFound(position) {
+        // Center map on your location ...
+        mapCenter = new google.maps.LatLng(position.coords.latitude,
+            position.coords.longitude);
+        map.setCenter(mapCenter);
+        // ... add new marker at map's center ...
+        marker = new google.maps.Marker(
+            { position:mapCenter,
+              map:map, title:"Your position" });
+      }
+
+
+      function initialize() {
+        var myOptions = {
+          zoom:14,
+          center:new google.maps.LatLng(-34.397, 150.644),
+          mapTypeId:google.maps.MapTypeId.ROADMAP
+        };
+        map = new google.maps.Map(document.getElementById('map_canvas'),
+            myOptions);
+        var error;
+
+        if (navigator.geolocation) {
+          // ... ask for current position ...
+          navigator.geolocation.getCurrentPosition(locationFound,
+              handleError);
+        } else {
+          alert("Geolocation not available");
+        }
+      }
+
+      google.maps.event.addDomListener(window, 'load', initialize);
+    </script>
 <% end %>
