@@ -5,6 +5,7 @@ class DeparturesController < ApplicationController
 
   def index
     @departures = Departure.where(:location_id => @location.id, :route_id => @route.id)
+    render :layout => false
   end
 
   def create

@@ -8,7 +8,7 @@
   <tbody>
   <% @departures.each do |departure| %>
     <tr>
-      <td><%= departure.departing_at.strftime("%H:%M")  %></td>
+      <td><%= departure %></td>
       <td><%= link_to "Usuń", route_location_departure_path(@route, @location, departure), :method => :delete, :remote => true %></td>
     </tr>
   <% end %>
