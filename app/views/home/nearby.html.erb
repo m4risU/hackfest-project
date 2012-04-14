@@ -1,17 +1,28 @@
-
 <% @locations.each do |location| %>
   <div class="span3">
     <div class="well sidebar-nav">
-      <h3><%= location.route %></h3>
+      <h3><%= location.name %></h3>
       <ul class="nav nav-list">
-        <li class="nav-header"><%= location %></li>
+        <li class="nav-header"><%= location.name %></li>
         <li><%= link_to "Link1", "/path1" %></li>
         <li><%= link_to "Link2", "/path2" %></li>
         <li><%= link_to "Link3", "/path3" %></li>
       </ul>
 
-      <%= yield :sidebar %>
+      <%#= yield :sidebar %>
     </div>
     <!--/.well -->
   </div>
+
+  <script type="text/javascript">
+    var loc = new google.maps.LatLng(<%= location.lat %>, <%= location.lng %>);
+
+    var marker = new google.maps.Marker({
+      position:loc,
+      title:'<%= location.name %>',
+      map:map
+    });
+
+  </script>
 <% end %>
+
