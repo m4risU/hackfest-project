@@ -10,7 +10,7 @@ class Location < ActiveRecord::Base
     Location.
         select("*, 3956 * 2 * ASIN(SQRT(POWER(SIN((#{lat} - lat) * pi()/180 / 2), 2) + COS(#{lat} * pi()/180) * COS(lat * pi()/180) * POWER(SIN((#{lng} - lng) * pi()/180 / 2), 2))) AS distance").
         where(:vstop => true).
-        order("distance DESC").
+        order("distance ASC").
         limit(3)
   end
 
