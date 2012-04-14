@@ -14,6 +14,16 @@ class LocationsController < ApplicationController
     end
   end
 
+  def attach
+    location = Location.find(params[:id])
+    if location.present?
+      @route.route_connections.create!(:location_id => location.id)
+      render :text => "ok", :status => 201
+    else
+      render :text => :not_found
+    end
+  end
+
   def index
     @locations = @route.locations
     render :layout => false
@@ -62,7 +72,7 @@ class LocationsController < ApplicationController
     location = @route.locations.find(params[:id])
     @departures = Departure.where(:location_id => location.id, :route_id => @route.id)
     respond_to do |format|
-      format.html {  }
+      format.html {}
       format.js {
         render :partial => 'departures'
       }

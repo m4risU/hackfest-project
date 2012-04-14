@@ -38,4 +38,6 @@ HackfestProject::Application.configure do
   # devise default url
   config.action_mailer.default_url_options = {:host => 'localhost:3000'}
 
+  # time zone
+  config.time_zone = 'Warsaw'
 end

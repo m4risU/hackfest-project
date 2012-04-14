@@ -41,6 +41,19 @@
           map:map, title:"Your position" });
   }
 
+  function attachPosition(marker) {
+    var path = poly.getPath();
+
+    $.post('/routes/<%= @route.id %>/locations/' + marker.location_id + '/attach', {  },
+        function (data) {
+          if (data == "ok") {
+            path.push(marker.getPosition());
+            reloadLocations();
+          }
+        });
+
+  }
+
   function addLatLng(event) {
 
     var path = poly.getPath();
@@ -61,7 +74,7 @@
     poly.setMap(null);
     var original_length = routeMarkers.length;
     for (var i = 0; i < original_length; i = i + 1) {
-      routeMarkers.pop().setMap(null);
+      var marker = routeMarkers.pop().setMap(null);
     }
   }
 
@@ -71,15 +84,34 @@
   }
 
   function loadLocations() {
-  <% @route.locations.each do |location| %>
+    /* locations that will be just markers from other routes*/
+  <% Location.full.each do |location| %>
+  <% unless @route.locations.include?(location) %>
+    var loc = new google.maps.LatLng(<%= location.lat %>, <%= location.lng %>);
+    var marker = new google.maps.Marker({
+      position:loc,
+      title:'<%= location.name %>',
+      map:map,
+      location_id: '<%= location.id %>'
+    });
+
+    /*add click behaviour, so it will be added to the route*/
+    google.maps.event.addListener(marker, 'click', function () {
+      attachPosition(this);
+    });
+  <% end %>
+  <% end %>
+
+  <% @route.locations.reverse.each do |location| %>
     var path = poly.getPath();
     var loc = new google.maps.LatLng(<%= location.lat %>, <%= location.lng %>);
     path.push(loc);
   <% if location.vstop %>
     var marker = new google.maps.Marker({
       position:loc,
-      title: '<%= location.name %>',
-      map:map
+      title:'<%= location.name %>',
+      map:map,
+      location_id: '<%= location.id %>'
     });
     routeMarkers.push(marker);
   <% end %>

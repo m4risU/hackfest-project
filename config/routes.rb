@@ -12,6 +12,7 @@ HackfestProject::Application.routes.draw do
         get :toggle
         post :name
         post :push_departures
+        post :attach
       end
       resources :departures
     end
