@@ -8,7 +8,7 @@ path.push(loc);
 <% if location.vstop %>
 var marker = new google.maps.Marker({
   position:loc,
-  title:'#' + path.getLength(),
+  title: '<%= location.name %>',
   map:map
 });
 routeMarkers.push(marker);
