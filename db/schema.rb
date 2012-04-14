@@ -51,6 +51,7 @@ ActiveRecord::Schema.define(:version => 20120413210413) do
     t.float    "lat"
     t.float    "lng"
     t.integer  "route_id"
+    t.string   "name"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end

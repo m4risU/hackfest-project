@@ -40,6 +40,17 @@ class LocationsController < ApplicationController
     end
   end
 
+  def name
+    location = @route.locations.find(params[:id])
+    location.update_attribute(:name, params[:location][:name])
+    respond_to do |format|
+      format.html { redirect_to :back }
+      format.js {
+        render :partial => 'name', :locals => {:route => @route}
+      }
+    end
+  end
+
   private
   def fetch_route
     @route = Route.find(params[:route_id])

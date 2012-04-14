@@ -10,6 +10,7 @@ HackfestProject::Application.routes.draw do
     resources :locations do
       member do
         get :toggle
+        post :name
       end
     end
   end

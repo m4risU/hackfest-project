@@ -5,6 +5,7 @@ class CreateLocations < ActiveRecord::Migration
       t.float :lat
       t.float :lng
       t.integer :route_id
+      t.string :name
 
       t.timestamps
     end

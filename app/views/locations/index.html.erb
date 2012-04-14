@@ -2,13 +2,13 @@
   <thead>
   <tr>
     <th colspan="2">Lokacja</th>
-    <th>Przystanek</th>
+    <th colspan="2">Przystanek</th>
     <th>Akcje</th>
-
   </tr>
   <tr>
     <th>Lat</th>
     <th>Lng</th>
+    <th></th>
     <th></th>
     <th></th>
   </tr>
@@ -18,7 +18,27 @@
     <tr>
       <td><%= location.lat %></td>
       <td><%= location.lng %></td>
-      <td><%= link_to location.vstop?.to_s, toggle_route_location_path(@route, location, :format => :js), :remote => true %></td>
+      <% if !!location.vstop? %>
+        <td><%= link_to location.vstop?.to_s, toggle_route_location_path(@route, location, :format => :js), :remote => true %></td>
+        <td>
+          <form onsubmit="return false;">
+            <input type="text" placeholder="Type something…" class="name-button" id="<%= dom_id(location, :name) %>" value="<%= location.name %>">
+          </form>
+          <script type="text/javascript">
+            $().ready(function () {
+              $("#<%= dom_id(location, :name) %>").change(function () {
+                $.post('<%= name_route_location_url(@route, location) %>', { location:{ name:$(this).val() } },
+                    function (data) {
+                      reloadLocations();
+                    });
+              });
+            });
+          </script>
+        </td>
+      <% else %>
+        <td colspan="2"><%= link_to location.vstop?.to_s, toggle_route_location_path(@route, location, :format => :js), :remote => true %></td>
+      <% end %>
+
       <td><%= link_to "Usuń", route_location_path(@route, location), :method => :delete, :remote => true %></td>
     </tr>
   <% end %>
