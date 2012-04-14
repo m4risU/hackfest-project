@@ -38,7 +38,7 @@
     // ... add new marker at map's center ...
     marker = new google.maps.Marker(
         { position:mapCenter,
-          map:map, title:"Your position" });
+          map:map, title:"Your position", icon: '<%= asset_path("icon13.png") %>' });
   }
 
   function attachPosition(marker) {
@@ -92,7 +92,8 @@
       position:loc,
       title:'<%= location.name %>',
       map:map,
-      location_id: '<%= location.id %>'
+      location_id: '<%= location.id %>',
+      icon: '<%= asset_path("bus-tour.png") %>'
     });
 
     /*add click behaviour, so it will be added to the route*/
@@ -111,7 +112,8 @@
       position:loc,
       title:'<%= location.name %>',
       map:map,
-      location_id: '<%= location.id %>'
+      location_id: '<%= location.id %>',
+      icon: '<%= asset_path("bus-tour.png") %>'
     });
     routeMarkers.push(marker);
   <% end %>

@@ -1,15 +1,17 @@
 removePolygon();
 resetPolygon();
 
-<% @route.locations.each do |location| %>
+<% @route.locations.reverse.each do |location| %>
 var path = poly.getPath();
 var loc = new google.maps.LatLng(<%= location.lat %>, <%= location.lng %>);
 path.push(loc);
 <% if location.vstop %>
 var marker = new google.maps.Marker({
   position:loc,
-  title: '<%= location.name %>',
-  map:map
+  title:'<%= location.name %>',
+  map:map,
+  location_id: <%= location.id %>,
+  icon:'<%= asset_path("bus-tour.png") %>'
 });
 routeMarkers.push(marker);
 <% end %>

@@ -13,11 +13,11 @@
 
     <script type="text/javascript">
       var loc = new google.maps.LatLng(<%= location.lat %>, <%= location.lng %>);
-
       var marker = new google.maps.Marker({
         position:loc,
         title:'<%= location.name %>',
-        map:map
+        map:map,
+        icon: '<%= asset_path("bus-tour.png") %>'
       });
 
     </script>

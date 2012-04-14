@@ -24,7 +24,7 @@ class Location < ActiveRecord::Base
   end
 
   def departing_soon
-    departures.where("departing_at >= ?", Time.current).map { |departure|
+    departures.where("departing_at >= ?", Time.zone.now + 2.hours).map { |departure|
       departure.to_s
     }[0..2].join(", ")
   end

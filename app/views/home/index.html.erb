@@ -22,7 +22,7 @@
       // ... add new marker at map's center ...
       marker = new google.maps.Marker(
           { position:mapCenter,
-            map:map, title:"Your position" });
+            map:map, title:"Your position", icon: '<%= asset_path("icon13.png") %>' });
 
       lookupNearbyLocations(mapCenter);
 

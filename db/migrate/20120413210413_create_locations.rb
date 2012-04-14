@@ -4,7 +4,6 @@ class CreateLocations < ActiveRecord::Migration
       t.boolean :vstop
       t.float :lat
       t.float :lng
-      t.integer :route_id
       t.string :name
 
       t.timestamps
