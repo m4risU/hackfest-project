@@ -48,19 +48,10 @@
     // Because path is an MVCArray, we can simply append a new coordinate
     // and it will automatically appear
 
-    $.post('<%= route_locations_url(@route) %>', { location:{ lat:event.latLng.lat(), lng:event.latLng.lng() }, name:"John", time:"2pm" },
+    $.post('<%= route_locations_url(@route) %>', { location:{ lat:event.latLng.lat(), lng:event.latLng.lng() }},
         function (data) {
           if (data == "ok") {
-
             path.push(event.latLng);
-
-            // Add a new marker at the new plotted point on the polyline.
-//            var marker = new google.maps.Marker({
-//              position:event.latLng,
-//              title:'#' + path.getLength(),
-//              map:map
-//            });
-
             reloadLocations();
           }
         });
@@ -69,7 +60,7 @@
   function removePolygon() {
     poly.setMap(null);
     var original_length = routeMarkers.length;
-    for (var i = 0; i < original_length; i = i + 1){
+    for (var i = 0; i < original_length; i = i + 1) {
       routeMarkers.pop().setMap(null);
     }
   }

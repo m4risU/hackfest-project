@@ -14,4 +14,6 @@ HackfestProject::Application.routes.draw do
     end
   end
 
+  match "/nearby", :to => "home#nearby", :as => :nearby
+
 end
