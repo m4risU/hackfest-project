@@ -11,7 +11,9 @@ HackfestProject::Application.routes.draw do
       member do
         get :toggle
         post :name
+        post :push_departures
       end
+      resources :departures
     end
   end
 

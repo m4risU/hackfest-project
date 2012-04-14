@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  departing_at: 2012-04-14 09:54:09
+  location_id: 1
+  route_id: 1
+
+two:
+  departing_at: 2012-04-14 09:54:09
+  location_id: 1
+  route_id: 1

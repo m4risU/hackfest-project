@@ -1,0 +1,42 @@
+<%= semantic_form_for [:admin, @location] do |f| %>
+  <%= f.inputs :name %>
+  <%= f.buttons :commit %>
+<% end %>
+
+<div class="main_section panel" id="main_locations_section">
+  <h3>Departures</h3>
+
+  <div id="departure-list" class="panel_contents">
+
+  </div>
+</div>
+
+<% @location.routes.each do |route| %>
+  <div class="panel">
+    <h3><%= route.name %></h3>
+
+
+    <form onsubmit="return false;">
+      <textarea class="departures" id="<%= dom_id(route, :departures) %>" rows="5" cols="120"></textarea>
+    </form>
+    <script type="text/javascript">
+
+      function reloadDepartures() {
+        $.get('<%= route_location_departures_url(route, location) %>', function (data) {
+          $('#departure-list').html(data);
+        });
+      }
+
+      $().ready(function () {
+        $("#<%= dom_id(route, :departures) %>").change(function () {
+          $.post('<%= route_location_departures_url(route, @location) %>', { departures:$(this).val() },
+              function (data) {
+                reloadDepartures();
+              });
+        });
+        reloadDepartures();
+      });
+    </script>
+
+  </div>
+<% end %>

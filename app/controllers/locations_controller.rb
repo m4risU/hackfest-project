@@ -5,8 +5,9 @@ class LocationsController < ApplicationController
   before_filter :fetch_route
 
   def create
-    location = @route.locations.new(params[:location])
+    location = Location.new(params[:location])
     if location.save
+      @route.route_connections.create(:location_id => location.id)
       render :text => "ok", :status => 201
     else
       render :text => location.errors.first
@@ -20,7 +21,13 @@ class LocationsController < ApplicationController
 
   def destroy
     location = @route.locations.find(params[:id])
-    location.destroy
+    route_location = @route.route_connections.where(:location_id => location.id).first
+
+    if location.route_connections.count <= 1
+      location.destroy
+    end
+    route_location.destroy
+
     respond_to do |format|
       format.html { redirect_to :back }
       format.js {
@@ -47,6 +54,17 @@ class LocationsController < ApplicationController
       format.html { redirect_to :back }
       format.js {
         render :partial => 'name', :locals => {:route => @route}
+      }
+    end
+  end
+
+  def departures
+    location = @route.locations.find(params[:id])
+    @departures = Departure.where(:location_id => location.id, :route_id => @route.id)
+    respond_to do |format|
+      format.html {  }
+      format.js {
+        render :partial => 'departures'
       }
     end
   end

@@ -1,7 +1,12 @@
 class Location < ActiveRecord::Base
-  attr_accessible :lat, :lng, :route_id, :vstop
-  validates_presence_of :lat, :lng, :route_id
-  belongs_to :route
+  attr_accessible :lat, :lng, :vstop, :name
+  validates_presence_of :lat, :lng
+  has_many :routes, :through => :route_connections, :source => :route
+
+  has_many :route_connections
+  has_many :departures
+
+  scope :full, lambda { where :vstop => true }
 
   def self.find_close_to(location)
     lat = location[:lat]
@@ -15,6 +20,7 @@ class Location < ActiveRecord::Base
   end
 
   def to_s
-    "define me..."
+    name
   end
+
 end
