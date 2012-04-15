@@ -16,19 +16,37 @@ google.maps.event.addListener(marker<%= location.id %>, "mouseover", function ()
 
 google.maps.event.addListener(marker<%= location.id %>, "click", function () {
 //  hide others
-  $(".location-panel").hide();
+  $(".location-panel").each(function () {
+    $(this).parent().remove();
+  });
   var location_id = this.location_id;
 //  remove map markers
   removeHomeMarkers();
 
 //  fetch more details
   $.get('/location_details/' + location_id, function (data) {
-    $("#<%= dom_id(@location, :nearby) %>").parent().parent().append(data);
+    $("#location-panels").html(data);
     $.getScript('/location_details/' + location_id + '.js');
   });
 
 //  show more details
   $("#<%= dom_id(@location, :nearby) %>").stop(true, true).fadeIn();
+});
+
+$().ready(function () {
+  <% location.routes.each do |route| %>
+  $("#<%= "location_#{location.id}_route_#{route.id}_route_desc" %>").mouseover(function () {
+
+    $.get('<%= details_route_location_departures_path(route,location) %>', function (data) {
+      $("#route_details").html(data);
+    });
+
+    $("#route_details").stop(true, true).fadeIn('fast');
+  });
+  $("#<%= "location_#{location.id}_route_#{route.id}_route_desc" %>").mouseout(function () {
+    $("#route_details").stop(true, true).slideUp('fast');
+  });
+  <% end %>
 });
 
 <% end %>

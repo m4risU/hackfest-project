@@ -1,12 +1,12 @@
-<div class="well sidebar-nav location-panel">
+<div class="well sidebar-nav">
   <div class="location-panel" id="<%= dom_id(@location, :nearby) %>">
     <h3><%= @location.name %></h3>
-    <ul class="nav nav-list">
-      <% @routes.each do |route| %>
+    <% @routes.each do |route| %>
+      <ul class="nav nav-list" id="<%= "location_#{@location.id}_route_#{route.id}_route_desc" %>">
         <li class="nav-header"><%= route.name %></li>
         <li><%= @location.departing_soon(route) %></li>
-      <% end %>
-    </ul>
+      </ul>
+    <% end %>
   </div>
 </div>
 

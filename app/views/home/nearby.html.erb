@@ -13,22 +13,36 @@
   }
 
 </script>
-<div class="span3">
+<div class="span3" id="location-panels">
   <% @locations.each do |location| %>
 
-    <div class="well sidebar-nav location-panel">
+    <div class="well sidebar-nav">
       <div class="location-panel" id="<%= dom_id(location, :nearby) %>">
         <h3><%= location.name %></h3>
-        <ul class="nav nav-list">
-          <% location.routes.each do |route| %>
+        <% location.routes.each do |route| %>
+          <ul class="nav nav-list" id="<%= "location_#{location.id}_route_#{route.id}_route_desc" %>">
             <li class="nav-header"><%= route.name %></li>
             <li><%= location.departing_soon(route) %></li>
-          <% end %>
-        </ul>
+          </ul>
+        <% end %>
       </div>
     </div>
 
     <script type="text/javascript">
+      $().ready(function () {
+        <% location.routes.each do |route| %>
+        $("#<%= "location_#{location.id}_route_#{route.id}_route_desc" %>").mouseover(function () {
+          $.get('<%= details_route_location_departures_path(route,location) %>', function (data) {
+                $("#route_details").html(data);
+              });
+          $("#route_details").stop(true, true).fadeIn('fast');
+        });
+        $("#<%= "location_#{location.id}_route_#{route.id}_route_desc" %>").mouseout(function () {
+          $("#route_details").stop(true, true).slideUp('fast');
+        });
+        <% end %>
+      });
+
       var loc = new google.maps.LatLng(<%= location.lat %>, <%= location.lng %>);
       var marker = new google.maps.Marker({
         position:loc,
@@ -53,7 +67,7 @@
 
         // fetch more details
         $.get('/location_details/' + this.location_id, function (data) {
-          $("#<%= dom_id(location, :nearby) %>").parent().parent().append(data);
+          $("#location-panels").html(data);
         });
         $.getScript('/location_details/' + this.location_id + '.js');
 

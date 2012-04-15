@@ -9,7 +9,7 @@ class DeparturesController < ApplicationController
   end
 
   def create
-    times = params[:departures].gsub(" ","").gsub("\"","").gsub("\n",",").split(",")
+    times = params[:departures].gsub(" ", "").gsub("\"", "").gsub("\n", ",").split(",")
     times.each do |time_elem|
       @location.departures.create(:departing_at => time_elem, :route_id => @route.id)
     end
@@ -26,6 +26,11 @@ class DeparturesController < ApplicationController
         render :partial => 'destroy'
       }
     end
+  end
+
+  def details
+    @departures = Departure.where(:location_id => @location.id, :route_id => @route.id).order("departing_at ASC")
+    render :layout => false
   end
 
   private

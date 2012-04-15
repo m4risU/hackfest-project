@@ -14,7 +14,11 @@ HackfestProject::Application.routes.draw do
         post :push_departures
         post :attach
       end
-      resources :departures
+      resources :departures do
+        collection do
+          get :details
+        end
+      end
     end
   end
 
