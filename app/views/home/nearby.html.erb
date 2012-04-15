@@ -1,9 +1,14 @@
 <script type="text/javascript">
   var homeLocationMarkers = new Array();
+  var homePolys = new Array();
   function removeHomeMarkers() {
     var original_length = homeLocationMarkers.length;
     for (var i = 0; i < original_length; i = i + 1) {
       var marker = homeLocationMarkers.pop().setMap(null);
+    }
+    var original_length = homePolys.length;
+    for (var i = 0; i < original_length; i = i + 1) {
+      var marker = homePolys.pop().setMap(null);
     }
   }
 
@@ -36,7 +41,7 @@
       homeLocationMarkers.push(marker);
 
       google.maps.event.addListener(marker, "mouseover", function () {
-        $("#<%= dom_id(location, :nearby) %>").stop(true, true).effect("highlight", {}, 5000);
+        $("#<%= dom_id(location, :nearby) %>").parent().stop(true, true).effect("highlight", {}, 5000);
       });
 
       google.maps.event.addListener(marker, "click", function () {

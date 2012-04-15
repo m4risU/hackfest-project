@@ -11,7 +11,7 @@ var marker<%= location.id %> = new google.maps.Marker({
 homeLocationMarkers.push(marker<%= location.id %>);
 
 google.maps.event.addListener(marker<%= location.id %>, "mouseover", function () {
-  $("#<%= dom_id(location, :nearby) %>").stop(true, true).effect("highlight", {}, 5000);
+  $("#<%= dom_id(location, :nearby) %>").parent().stop(true, true).effect("highlight", {}, 5000);
 });
 
 google.maps.event.addListener(marker<%= location.id %>, "click", function () {
@@ -35,3 +35,22 @@ google.maps.event.addListener(marker<%= location.id %>, "click", function () {
 
 // drawing shapes
 
+<% @location.departing_routes.each_with_index do |departing_route, index| %>
+var poly<%= index %>;
+
+var polyOptions<%= index %> = {
+  strokeColor:'#000000',
+  strokeOpacity:1.0,
+  strokeWeight:3
+};
+
+poly<%= index %> = new google.maps.Polyline(polyOptions<%= index %>);
+poly<%= index %>.setMap(map);
+
+var path<%= index %> = poly<%= index %>.getPath();
+<% departing_route.each do |loc_id| %>
+path<%= index %>.push(marker<%= loc_id %>.getPosition());
+<% end %>
+
+homePolys.push(poly<%= index %>);
+<% end %>
