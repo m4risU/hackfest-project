@@ -14,67 +14,78 @@
 
 </script>
 <div class="span3" id="location-panels">
-  <% @locations.each do |location| %>
+  <% if @locations.any? %>
+    <% @locations.each do |location| %>
 
-    <div class="well sidebar-nav">
-      <div class="location-panel" id="<%= dom_id(location, :nearby) %>">
-        <h3><%= location.name %></h3>
-        <% location.routes.each do |route| %>
-          <ul class="nav nav-list" id="<%= "location_#{location.id}_route_#{route.id}_route_desc" %>">
-            <li class="nav-header"><%= route.name %></li>
-            <li><%= location.departing_soon(route) %></li>
-          </ul>
-        <% end %>
+      <div class="well sidebar-nav">
+        <div class="location-panel" id="<%= dom_id(location, :nearby) %>">
+          <h3><%= location.name %></h3>
+          <% location.routes.each do |route| %>
+            <ul class="nav nav-list" id="<%= "location_#{location.id}_route_#{route.id}_route_desc" %>">
+              <li class="nav-header"><%= route.name %></li>
+              <li><%= location.departing_soon(route) %></li>
+            </ul>
+          <% end %>
+        </div>
+      </div>
+
+      <script type="text/javascript">
+        $().ready(function () {
+          <% location.routes.each do |route| %>
+          $("#<%= "location_#{location.id}_route_#{route.id}_route_desc" %>").mouseover(function () {
+            $.get('<%= details_route_location_departures_path(route,location) %>', function (data) {
+              $("#route_details").html(data);
+            });
+            $("#route_details").stop(true, true).fadeIn('fast');
+          });
+          $("#<%= "location_#{location.id}_route_#{route.id}_route_desc" %>").mouseout(function () {
+            $("#route_details").stop(true, true).slideUp('fast');
+          });
+          <% end %>
+        });
+
+        var loc = new google.maps.LatLng(<%= location.lat %>, <%= location.lng %>);
+        var marker = new google.maps.Marker({
+          position:loc,
+          title:'<%= location.name %>',
+          map:map,
+          icon:'<%= asset_path("bus-tour.png") %>',
+          location_id: <%= location.id %>
+        });
+
+        homeLocationMarkers.push(marker);
+
+        google.maps.event.addListener(marker, "mouseover", function () {
+          $("#<%= dom_id(location, :nearby) %>").parent().stop(true, true).effect("highlight", {}, 5000);
+        });
+
+        google.maps.event.addListener(marker, "click", function () {
+          // hide others
+          $(".location-panel").hide();
+
+          // remove map markers
+          removeHomeMarkers();
+
+          // fetch more details
+          $.get('/location_details/' + this.location_id, function (data) {
+            $("#location-panels").html(data);
+          });
+          $.getScript('/location_details/' + this.location_id + '.js');
+
+          // show more details
+          $("#<%= dom_id(location, :nearby) %>").stop(true, true).fadeIn();
+        });
+
+      </script>
+    <% end %>
+  <% else %>
+    <div class="span3">
+      <div class="well">
+        <p>
+          Aplikacja powstała, ale ze względu na mały team nie znalazło się wystarczająco dużo czasu aby wprowadzić
+          więcej danych niż kilku linii komunikacyjnych w Bielsku-Białej.
+        </p>
       </div>
     </div>
-
-    <script type="text/javascript">
-      $().ready(function () {
-        <% location.routes.each do |route| %>
-        $("#<%= "location_#{location.id}_route_#{route.id}_route_desc" %>").mouseover(function () {
-          $.get('<%= details_route_location_departures_path(route,location) %>', function (data) {
-                $("#route_details").html(data);
-              });
-          $("#route_details").stop(true, true).fadeIn('fast');
-        });
-        $("#<%= "location_#{location.id}_route_#{route.id}_route_desc" %>").mouseout(function () {
-          $("#route_details").stop(true, true).slideUp('fast');
-        });
-        <% end %>
-      });
-
-      var loc = new google.maps.LatLng(<%= location.lat %>, <%= location.lng %>);
-      var marker = new google.maps.Marker({
-        position:loc,
-        title:'<%= location.name %>',
-        map:map,
-        icon:'<%= asset_path("bus-tour.png") %>',
-        location_id: <%= location.id %>
-      });
-
-      homeLocationMarkers.push(marker);
-
-      google.maps.event.addListener(marker, "mouseover", function () {
-        $("#<%= dom_id(location, :nearby) %>").parent().stop(true, true).effect("highlight", {}, 5000);
-      });
-
-      google.maps.event.addListener(marker, "click", function () {
-        // hide others
-        $(".location-panel").hide();
-
-        // remove map markers
-        removeHomeMarkers();
-
-        // fetch more details
-        $.get('/location_details/' + this.location_id, function (data) {
-          $("#location-panels").html(data);
-        });
-        $.getScript('/location_details/' + this.location_id + '.js');
-
-        // show more details
-        $("#<%= dom_id(location, :nearby) %>").stop(true, true).fadeIn();
-      });
-
-    </script>
   <% end %>
 </div>
