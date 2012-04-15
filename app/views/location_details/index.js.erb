@@ -4,7 +4,7 @@ var marker<%= location.id %> = new google.maps.Marker({
   position:loc<%= location.id %>,
   title:'<%= location.name %>',
   map:map,
-  icon:'<%= asset_path("bus-tour.png") %>',
+  icon:'<%= location == @location ? asset_path("bus-tour-past.png") :asset_path("bus-tour-current.png") %>',
   location_id: <%= location.id %>
 });
 
@@ -35,12 +35,12 @@ google.maps.event.addListener(marker<%= location.id %>, "click", function () {
 
 // drawing shapes
 
-<% @location.departing_routes.each_with_index do |departing_route, index| %>
+<% @location.departing_route_locations.each_with_index do |departing_route, index| %>
 var poly<%= index %>;
 
 var polyOptions<%= index %> = {
-  strokeColor:'#000000',
-  strokeOpacity:1.0,
+  strokeColor:'#<%= cycle('42acef', 'fe0000', '8711e0', 'e07211', '0000e2', '2e9b2e') %>',
+  strokeOpacity:0.7,
   strokeWeight:3
 };
 
@@ -48,8 +48,8 @@ poly<%= index %> = new google.maps.Polyline(polyOptions<%= index %>);
 poly<%= index %>.setMap(map);
 
 var path<%= index %> = poly<%= index %>.getPath();
-<% departing_route.each do |loc_id| %>
-path<%= index %>.push(marker<%= loc_id %>.getPosition());
+<% departing_route.each do |lat, lng| %>
+path<%= index %>.push(new google.maps.LatLng(<%= lat %>, <%= lng %>));
 <% end %>
 
 homePolys.push(poly<%= index %>);

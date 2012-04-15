@@ -39,4 +39,10 @@ class Location < ActiveRecord::Base
     end
   end
 
+  def departing_route_locations
+    routes.map do |route|
+      route.locations.map { |loc| [loc.lat, loc.lng] }
+    end
+  end
+
 end
