@@ -1,0 +1,37 @@
+<% @location.departing_locations.each do |location| %>
+var loc<%= location.id %> = new google.maps.LatLng(<%= location.lat %>, <%= location.lng %>);
+var marker<%= location.id %> = new google.maps.Marker({
+  position:loc<%= location.id %>,
+  title:'<%= location.name %>',
+  map:map,
+  icon:'<%= asset_path("bus-tour.png") %>',
+  location_id: <%= location.id %>
+});
+
+homeLocationMarkers.push(marker<%= location.id %>);
+
+google.maps.event.addListener(marker<%= location.id %>, "mouseover", function () {
+  $("#<%= dom_id(location, :nearby) %>").stop(true, true).effect("highlight", {}, 5000);
+});
+
+google.maps.event.addListener(marker<%= location.id %>, "click", function () {
+//  hide others
+  $(".location-panel").hide();
+  var location_id = this.location_id;
+//  remove map markers
+  removeHomeMarkers();
+
+//  fetch more details
+  $.get('/location_details/' + location_id, function (data) {
+    $("#<%= dom_id(@location, :nearby) %>").parent().parent().append(data);
+    $.getScript('/location_details/' + location_id + '.js');
+  });
+
+//  show more details
+  $("#<%= dom_id(@location, :nearby) %>").stop(true, true).fadeIn();
+});
+
+<% end %>
+
+// drawing shapes
+

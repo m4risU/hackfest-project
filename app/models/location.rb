@@ -23,10 +23,20 @@ class Location < ActiveRecord::Base
     name
   end
 
-  def departing_soon
-    departures.where("departing_at >= ?", Time.zone.now + 2.hours).map { |departure|
+  def departing_soon(route)
+    departures.where(:route_id => route.id).where("departing_at >= ?", Time.zone.now + 2.hours).map { |departure|
       departure.to_s
     }[0..2].join(", ")
+  end
+
+  def departing_locations
+    self.class.where(:id => departing_routes.flatten)
+  end
+
+  def departing_routes
+    routes.map do |route|
+      route.locations.full.map(&:id)
+    end
   end
 
 end

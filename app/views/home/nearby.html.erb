@@ -1,14 +1,26 @@
+<script type="text/javascript">
+  var homeLocationMarkers = new Array();
+  function removeHomeMarkers() {
+    var original_length = homeLocationMarkers.length;
+    for (var i = 0; i < original_length; i = i + 1) {
+      var marker = homeLocationMarkers.pop().setMap(null);
+    }
+  }
+
+</script>
 <div class="span3">
   <% @locations.each do |location| %>
 
-    <div class="well sidebar-nav">
-      <h3><%= location.name %></h3>
-      <ul class="nav nav-list">
-        <% location.routes.each do |route| %>
-          <li class="nav-header"><%= route.name %></li>
-          <li><%= location.departing_soon %></li>
-        <% end %>
-      </ul>
+    <div class="well sidebar-nav location-panel">
+      <div class="location-panel" id="<%= dom_id(location, :nearby) %>">
+        <h3><%= location.name %></h3>
+        <ul class="nav nav-list">
+          <% location.routes.each do |route| %>
+            <li class="nav-header"><%= route.name %></li>
+            <li><%= location.departing_soon(route) %></li>
+          <% end %>
+        </ul>
+      </div>
     </div>
 
     <script type="text/javascript">
@@ -17,7 +29,31 @@
         position:loc,
         title:'<%= location.name %>',
         map:map,
-        icon: '<%= asset_path("bus-tour.png") %>'
+        icon:'<%= asset_path("bus-tour.png") %>',
+        location_id: <%= location.id %>
+      });
+
+      homeLocationMarkers.push(marker);
+
+      google.maps.event.addListener(marker, "mouseover", function () {
+        $("#<%= dom_id(location, :nearby) %>").stop(true, true).effect("highlight", {}, 5000);
+      });
+
+      google.maps.event.addListener(marker, "click", function () {
+        // hide others
+        $(".location-panel").hide();
+
+        // remove map markers
+        removeHomeMarkers();
+
+        // fetch more details
+        $.get('/location_details/' + this.location_id, function (data) {
+          $("#<%= dom_id(location, :nearby) %>").parent().parent().append(data);
+        });
+        $.getScript('/location_details/' + this.location_id + '.js');
+
+        // show more details
+        $("#<%= dom_id(location, :nearby) %>").stop(true, true).fadeIn();
       });
 
     </script>
