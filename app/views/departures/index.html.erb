@@ -15,7 +15,7 @@
     <tr>
       <% group.each do |departure| %>
         <% if departure %>
-          <td><%= departure.to_s %></td>
+          <td><%= raw departure.to_s %></td>
           <td><%= link_to "Usuń", route_location_departure_path(@route, @location, departure), :method => :delete, :remote => true %></td>
         <% else %>
           <td colspan="2">&nbsp;</td>

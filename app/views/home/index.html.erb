@@ -2,15 +2,28 @@
 <div id="map_canvas" style="width:870px; height:400px; margin-bottom: 25px;"></div>
 
 <% content_for :sidebar do %>
-<div id="vstops-nearby">
+  <div id="vstops-nearby">
 
-</div>
+  </div>
+
+  <div class="span3">
+    <div class="well">
+      Kliknij dwa razy na mapie, by szukać przystanków w okolicy.
+    </div>
+    <div class="well">
+      Kliknij w ikonę przystanku, aby zobaczyć całą trasę.
+    </div>
+    <div class="well">
+      Najedź kursorem myszki nad nazwę trasy, aby zobaczyć rozkład jazdy.
+    </div>
+  </div>
 <% end %>
 
 <% content_for :javascript do %>
   <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=true&key=AIzaSyAQr_tEegteAJSxNhTnKkWji82ANltfK-s"></script>
   <script type="text/javascript">
     var map;
+    var lookupMarker;
     function handleError(error) {
       alert('Error: ' + error.message + ' (' + error.code + ')');
     }
@@ -21,9 +34,9 @@
           position.coords.longitude);
       map.setCenter(mapCenter);
       // ... add new marker at map's center ...
-      marker = new google.maps.Marker(
+      lookupMarker = new google.maps.Marker(
           { position:mapCenter,
-            map:map, title:"Your position", icon: '<%= asset_path("icon13.png") %>' });
+            map:map, title:"Your position", icon:'<%= asset_path("icon13.png") %>' });
 
       lookupNearbyLocations(mapCenter);
 
@@ -37,6 +50,14 @@
 
     }
 
+    function changeLookupPosition(event) {
+      lookupMarker.position = event.latLng;
+      lookupMarker.setMap(null);
+      lookupMarker.setMap(map);
+      removeHomeMarkers();
+      lookupNearbyLocations(event.latLng);
+    }
+
     function initialize() {
       var myOptions = {
         zoom:14,
@@ -45,7 +66,10 @@
       };
       map = new google.maps.Map(document.getElementById('map_canvas'),
           myOptions);
+      map.disableDoubleClickZoom = true;
       var error;
+
+      google.maps.event.addListener(map, 'dblclick', changeLookupPosition);
 
       if (navigator.geolocation) {
         // ... ask for current position ...
