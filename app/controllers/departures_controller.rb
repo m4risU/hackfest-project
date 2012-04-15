@@ -4,12 +4,12 @@ class DeparturesController < ApplicationController
   before_filter :fetch_location
 
   def index
-    @departures = Departure.where(:location_id => @location.id, :route_id => @route.id)
+    @departures = Departure.where(:location_id => @location.id, :route_id => @route.id).order("departing_at ASC")
     render :layout => false
   end
 
   def create
-    times = params[:departures].split(",")
+    times = params[:departures].gsub(" ","").gsub("\"","").gsub("\n",",").split(",")
     times.each do |time_elem|
       @location.departures.create(:departing_at => time_elem, :route_id => @route.id)
     end

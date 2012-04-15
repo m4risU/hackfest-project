@@ -6,9 +6,11 @@
 <div class="main_section panel" id="main_locations_section">
   <h3>Departures</h3>
 
-  <div id="departure-list" class="panel_contents">
+  <% @location.routes.each do |route| %>
+  <div id="departure-list-<%= route.id %>" class="panel_contents">
 
   </div>
+  <% end  %>
 </div>
 
 <% @location.routes.each do |route| %>
@@ -21,9 +23,9 @@
     </form>
     <script type="text/javascript">
 
-      function reloadDepartures() {
+      function reloadDepartures<%= route.id %>() {
         $.get('<%= route_location_departures_url(route, location) %>', function (data) {
-          $('#departure-list').html(data);
+          $("#departure-list-<%= route.id %>").html(data);
         });
       }
 
@@ -31,10 +33,10 @@
         $("#<%= dom_id(route, :departures) %>").change(function () {
           $.post('<%= route_location_departures_url(route, @location) %>', { departures:$(this).val() },
               function (data) {
-                reloadDepartures();
+                reloadDepartures<%= route.id %>();
               });
         });
-        reloadDepartures();
+        reloadDepartures<%= route.id %>();
       });
     </script>
 
