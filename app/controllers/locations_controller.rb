@@ -1,6 +1,6 @@
 class LocationsController < ApplicationController
 
-  skip_before_filter :verify_authenticity_token
+  #skip_before_filter :verify_authenticity_token
 
   before_filter :fetch_route
 
