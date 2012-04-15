@@ -29,13 +29,14 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </a>
-      <a class="brand" href="#">HackfestProject</a>
+      <a class="brand" href="#" title="Wyszukiwarka połączeń autobusów miejskich">Wyszukiwarka
+        MZK</a>
 
       <div class="container nav-collapse">
         <ul class="nav">
-          <li><%= link_to "Link1", "/path1" %></li>
-          <li><%= link_to "Link2", "/path2" %></li>
-          <li><%= link_to "Link3", "/path3" %></li>
+          <!--<li><%= link_to "Link1", "/path1" %></li>-->
+          <!--<li><%= link_to "Link2", "/path2" %></li>-->
+          <!--<li><%= link_to "Link3", "/path3" %></li>-->
         </ul>
 
       </div>
@@ -51,8 +52,8 @@
         <%= yield %>
       </div>
       <div id="side-wrapper" class="span3">
-      <%= yield :sidebar %>
-       </div>
+        <%= yield :sidebar %>
+      </div>
       <!--/span-->
     </div>
     <!--/row-->
@@ -60,7 +61,8 @@
   <!--/content-->
 
   <footer>
-    <p>&copy; Company 2012</p>
+    <p>&copy; Red Warrior Studio 2012 aplikacja powstała w
+      ramach <%= link_to "hackfest #3 Bielsko-Biała 2012", "http://hackfest.pl" %></p>
   </footer>
 
 </div>

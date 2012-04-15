@@ -7,7 +7,7 @@ class HomeController < ApplicationController
   end
 
   def nearby
-    @locations = Location.find_close_to(params[:location])
+    @locations = Location.find_close_to(params[:location], {:limit => params[:limit]})
     render :layout => false
   end
 

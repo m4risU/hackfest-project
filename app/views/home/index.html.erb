@@ -1,21 +1,29 @@
-<div id="route_details" class="span8 well"></div>
-<div id="map_canvas" style="width:870px; height:400px; margin-bottom: 25px;"></div>
+<div id="route_details" class="span8 well alert alert-info"></div>
+<div id="map_canvas" style="width:870px; height:600px; margin-bottom: 25px;"></div>
 
 <% content_for :sidebar do %>
   <div id="vstops-nearby">
 
   </div>
-
-  <div class="span3">
-    <div class="well">
-      Kliknij dwa razy na mapie, by szukać przystanków w okolicy.
-    </div>
-    <div class="well">
-      Kliknij w ikonę przystanku, aby zobaczyć całą trasę.
-    </div>
-    <div class="well">
-      Najedź kursorem myszki nad nazwę trasy, aby zobaczyć rozkład jazdy.
-    </div>
+  <div id="helper-texts" class="span3">
+    <% case rand(4) %>
+    <% when 0 %>
+      <div class="well alert alert-success">
+        Kliknij dwa razy na mapie, by szukać przystanków w okolicy.
+      </div>
+    <% when 1 %>
+      <div class="well alert alert-success">
+        Kliknij w ikonę przystanku, aby zobaczyć całą trasę.
+      </div>
+    <% when 2 %>
+      <div class="well alert alert-success">
+        Najedź kursorem myszki nad nazwę trasy, aby zobaczyć rozkład jazdy.
+      </div>
+    <% when 3 %>
+      <div class="well alert alert-success">
+        Jesli nie widzisz żadnych wyników spróbuj powiększyć widok mapki kółkiem myszki.
+      </div>
+    <% end %>
   </div>
 <% end %>
 

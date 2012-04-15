@@ -17,7 +17,7 @@
   <% if @locations.any? %>
     <% @locations.each do |location| %>
 
-      <div class="well sidebar-nav">
+      <div class="well sidebar-nav alert alert-info">
         <div class="location-panel" id="<%= dom_id(location, :nearby) %>">
           <h3><%= location.name %></h3>
           <% location.routes.each do |route| %>
@@ -79,13 +79,13 @@
       </script>
     <% end %>
   <% else %>
-    <div class="span3">
-      <div class="well">
-        <p>
-          Aplikacja powstała, ale ze względu na mały team nie znalazło się wystarczająco dużo czasu aby wprowadzić
-          więcej danych niż kilku linii komunikacyjnych w Bielsku-Białej.
-        </p>
-      </div>
+
+    <div class="well">
+      <p>
+        Aplikacja powstała, ale ze względu na mały team nie znalazło się wystarczająco dużo czasu aby wprowadzić
+        więcej danych niż kilku linii komunikacyjnych w Bielsku-Białej.
+      </p>
     </div>
+
   <% end %>
 </div>

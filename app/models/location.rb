@@ -8,15 +8,15 @@ class Location < ActiveRecord::Base
 
   scope :full, lambda { where :vstop => true }
 
-  def self.find_close_to(location)
+  def self.find_close_to(location, params)
     lat = location[:lat]
     lng = location[:lng]
-
+    limit_no = params[:limit] || 5
     Location.
         select("*, 3956 * 2 * ASIN(SQRT(POWER(SIN((#{lat} - lat) * pi()/180 / 2), 2) + COS(#{lat} * pi()/180) * COS(lat * pi()/180) * POWER(SIN((#{lng} - lng) * pi()/180 / 2), 2))) AS distance").
         where(:vstop => true).
         order("distance ASC").
-        limit(3)
+        limit(limit_no)
   end
 
   def to_s
